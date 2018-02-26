@@ -1,0 +1,142 @@
+<% if session[:lang] == "ua" 
+    text ={ 
+      :title => "Бібліотека на RubyOnRails",
+      :name => "Бібліотека Ruby On Rails",
+      :books => "Книги",
+      :registration => "Реєстрація",
+      :autorisation => "Авторизація",
+      :exit => "Вихід",
+      :lang => "Мова",
+      :ua => "укр",
+      :ru => "рус",
+      :en => "анг",
+      :auth => "Автори",
+      :zhanr => "Жанри",
+      :about_site => "Про сайт",
+      :about_us => "Про нас",
+      :submit => "Пошук"
+    } 
+  elsif session[:lang] == "en" 
+    text ={
+      :title => "Library on RubyOnRails",
+      :name => "Library Ruby On Rails",
+      :books => "Books",
+      :registration => "Registration",
+      :autorisation => "Autorisation",
+      :exit => "Exit",
+      :lang => "Language",
+      :ua => "ua",
+      :ru => "ru",
+      :en => "en",
+      :auth => "Authors",
+      :zhanr => "Genres",
+      :about_site => "About site",
+      :about_us => "About us",
+      :submit => "Search"
+    } 
+  elsif session[:lang] == "ru"
+    text ={
+      :title => "Библиотека на RubyOnRails",
+      :name => "Библиотека Ruby On Rails",
+      :books => "Книги",
+      :registration => "Реєстрация",
+      :autorisation => "Авторизация",
+      :exit => "Виход",
+      :lang => "Язык",
+      :ua => "укр",
+      :ru => "рус",
+      :en => "анг",
+      :auth => "Автори",
+      :zhanr => "Жанри",
+      :about_site => "О сайте",
+      :about_us => "О нас",
+      :submit => "Поиск"
+    } 
+  end 
+%>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= text[:title] %></title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+  <div id="wrapper">
+    <header>
+      <div class="navbar navbar-default navbar-static-top">
+        <div class="container">
+          <div class="navbar-header">`
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <h1><a class="navbar-brand" href=""><%= text[:name]%></a></h1>
+          </div>
+          <div class="navbar-collapse collapse ">
+            <ul class="nav navbar-nav">
+              <li><%= link_to text[:auth], auths_path %></li>
+              <li><%= link_to text[:zhanr], zhanrs_path %></li>
+              <li><%= link_to text[:books], books_path %></li>
+              <% if user_signed_in? %>
+                <li><%= link_to current_user.email, profile_path %></li>
+                <li><%= link_to text[:exit], sign_out_path  %></li>
+              <% else %>
+                <li class="active"><%= link_to text[:registration], sign_up_path %></li>
+                <li><%= link_to text[:autorisation], sign_in_path %></li>
+              <% end %>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle " data-toggle="dropdown" data-hover="dropdown" data-delay="0" data-close-others="false"><%= text[:lang] %><b class=" icon-angle-down"></b></a>
+                <ul class="dropdown-menu">
+                  <% 
+                    ua = t ".ua"
+                    ru = t ".ru"
+                    en = t ".en"
+                  %>
+                  <li>
+                    <%= link_to_unless_current ua, locale: "ua" %>
+                  </li>
+                  <li>
+                    <%= link_to_unless_current ru, locale: "ru" %>
+                  </li>
+                  <li>
+                    <%= link_to_unless_current en, locale: "en" %>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          <div class="nav navbar-nav right">
+            <%= form_tag(books_path, :method => 'get', :class => "form-search") do %>
+              <p>
+                <%= text_field_tag :search, params[:search], :class => "input-medium search-query" %>
+                <%= submit_tag text[:submit], :class => "btn" %>
+              </p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </header>
+  </div>  
+  <%= yield %>
+  <div class="clear"></div>
+  <div id="wrapper" class="navbar-fixed-bottom row-fluid">
+    <div class="navbar-inner">
+      <div class="container">
+        <div id="footer" class="navbar navbar-default navbar-static-bottom col-md-6 col-md-offset-3">
+          <ul class="list-inline">
+            <li><h3 class="menu_head"><%= link_to text[:about_site], abouts_about_program_path %></h3></li>
+            <li><h3 class="menu_head"><%= link_to text[:about_us], abouts_about_us_path %></h3></li>
+            <li><h3 class="menu_head"><%= link_to "Правовласникам", for_holders_path %></h3></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  </body>
+</html>

@@ -1,0 +1,8 @@
+<div class="back">
+  <h1 class="col-md-6 col-md-offset-3 text-center back"><%= t ".title" %></h1>
+  <%= render 'form', auth: @auth %>
+  <% 
+    show = t ".show"
+  %>
+  <%= link_to show, @auth %>
+</div>
